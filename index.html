@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CloudFut</title>
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#2563eb">
+
+<link rel="apple-touch-icon" href="images/icon-192.png">
+
+<link rel="stylesheet" href="css/style.css">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<meta name="apple-mobile-web-app-title" content="CloudFut">
+</head>
+
+<body>
+
+<!-- Splash Screen -->
+
+<div id="splash">
+
+    <div class="logo">☁️</div>
+
+    <h1>CloudFut</h1>
+
+    <p>Smart • Secure • Fast</p>
+
+    <div class="loader"></div>
+
+</div>
+
+<!-- Install Button -->
+
+<button id="installBtn" style="display:none;">
+    Install CloudFut App
+</button>
+
+<!-- Script -->
+
+<script src="js/script.js"></script>
+
+<script>
+
+// =========================
+// Register Service Worker
+// =========================
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", function () {
+
+        navigator.serviceWorker.register("service-worker.js")
+
+        .then(function () {
+
+            console.log("Service Worker Registered");
+
+        })
+
+        .catch(function (error) {
+
+            console.log(error);
+
+        });
+
+    });
+
+}
+
+// =========================
+// Install App Button
+// =========================
+
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", function (e) {
+
+    e.preventDefault();
+
+    deferredPrompt = e;
+
+    document.getElementById("installBtn").style.display = "block";
+
+});
+
+document.getElementById("installBtn").addEventListener("click", async function () {
+
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+
+    await deferredPrompt.userChoice;
+
+    deferredPrompt = null;
+
+    this.style.display = "none";
+
+});
+
+// =========================
+// Auto Redirect
+// =========================
+
+setTimeout(function(){
+
+    window.location.href = "pages/login.html";
+
+},3000);
+
+</script>
+
+</body>
+
+</html>
